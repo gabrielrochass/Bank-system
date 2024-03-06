@@ -24,7 +24,7 @@ class Cliente:
         return conta
     
     def __str__(self): # forma usual de printar em POO
-        return f'Nome: {self.name}, CPF: {self.cpf}'
+        return f'Nome: {self.name}\nCPF: {self.cpf}'
     
 
 # classe Conta
@@ -72,20 +72,24 @@ class ContaPoupanca(Conta):
     def __init__(self, saldoInicial=0):
         super().__init__(saldoInicial)
         self._tipo = 'poupanca'
-        self._taxaJuros = 0.02 # taxa de juros de 2%
+        self._taxaJuros = 0.2 # taxa de juros de 20%
+    
+    def calculaJuros(self):
+        juros = self._saldo * self._taxaJuros
+        self._saldo += juros
+        self._registraTransacao(f"Rendimento de juros de R$ {juros}")
     
     def __str__(self):
         return f'Conta Poupança de número: {self.numeroConta} possui saldo de R$ {self._saldo}'
-    
-    def juros(self):
-        self._saldo *= self._taxaJuros
-        self._registraTransacao(f"Saldo total (Salado iniial + rendimentos): R$ {self._saldo * self._taxaJuros}")
-
-    
 # main
 if __name__ == '__main__':
+    count = 0
     name = input("Digite o nome do cliente: ")
     cpf = input("Digite o CPF do cliente: ")
+    if cpf.__len__() != 11:
+        print("CPF inválido")
+        cpf = input("Digite um CPF valido: ")
+
     cliente1 = Cliente(name, cpf)
     print(cliente1)
 
@@ -95,25 +99,32 @@ if __name__ == '__main__':
     print(cliente1._contas[0]) # acessa a primeira conta do cliente
 
     while True:
-        question = input("Deseja fazer alguma operação (s/n)? ")
+        if count >= 1:
+            question = input("Deseja fazer outra operação (s/n)? ")
+        else:
+            question = input("Deseja fazer alguma operação (s/n)? ")
         if question == 's':
+            count += 1
             operacao = input("Digite a operação (deposito ou saque): ")
             if operacao == 'deposito':
                 value = input("Digite o valor do depósito: ")
                 cliente1._contas[0].depositar(float(value))
+                print("Depósito realizado com sucesso!")
+                cliente1._contas[0].calculaJuros()
                 print(f"Novo saldo: R$ {cliente1._contas[0]._saldo}")
             elif operacao == 'saque':
-                print(ContaPoupanca.juros())
+                print(f"Saldo atual: R$ {cliente1._contas[0]._saldo}")
                 value = input("Digite o valor do saque: ")
-
                 cliente1._contas[0].sacar(float(value))
+                print("Saque realizado com sucesso!")
+                print(f"Novo saldo: R$ {cliente1._contas[0]._saldo}")
             else:
                 print("Operação inválida")
         else:
             break
 
 
-    print("\nFim das operações\n")
+    print("\nFim das operações!")
     querExtrato = input("Deseja ver o extrato da conta (s/n)? ")
     if querExtrato == 's':
         cliente1._contas[0].extrato()
