@@ -126,6 +126,10 @@ if __name__ == '__main__':
         if question == 's':
             count += 1
             operacao = input("Digite a operação (deposito ou saque): ")
+            while operacao != 'deposito' and operacao != 'saque':
+                print("Operação inválida")
+                operacao = input("Digite a operação (deposito ou saque): ")
+
             if operacao == 'deposito':
                 value = input("Digite o valor do depósito: ")
                 cliente1._contas[0].depositar(float(value))
@@ -141,10 +145,7 @@ if __name__ == '__main__':
                 cliente1._contas[0].sacar(float(value))
                 print("Saque realizado com sucesso!")
                 print(f"Novo saldo: R$ {cliente1._contas[0]._saldo}")
-            else:
-                while operacao != 'deposito' and operacao != 'saque':
-                    print("Operação inválida")
-                    operacao = input("Digite a operação (deposito ou saque): ")
+            
         else:
             break
 
@@ -157,90 +158,113 @@ if __name__ == '__main__':
         print("Obrigado! Volte sempre!")
 
 
-##############################################        
-    newCount = 0
-    querNovaConta = input("\nAgora que você já realizou suas operações, deseja abrir uma nova conta?")
-    while True:
-        if querNovaConta == 's':
-            newCount += 1
-            conta = input("Digite o tipo de conta (corrente ou poupanca): ")
-            saldo = float(input("Digite o saldo inicial da conta: "))
-            cliente1.abreConta(conta, saldo)
+##############################################     
+# erra a primeira vez o numero e ele n acha mais
 
-            # printa contas atuais
-            print("\nContas atuais:")
-            for conta in cliente1._contas:
-                print(conta)
-            
-            
-            # querNovaConta = input("Deseja abrir uma nova conta (s/n)? ")
-        elif querNovaConta == 'n':
-            print("Obrigado! Volte sempre!")
-            break
-        while querNovaConta != 's' and querNovaConta != 'n':
-            print("Resposta inválida")
-            querNovaConta = input("Deseja abrir uma nova conta (s/n)? ")
-        
-        novaConta = input("Digite o tipo de conta (corrente ou poupanca): ")
+
+
+    newCount = 0
+    querNovaConta = input("\nAgora que você já realizou suas operações, deseja abrir uma nova conta (s/n)? ")
+
+    while querNovaConta != 's' and querNovaConta != 'n':
+        print("Resposta inválida")
+        querNovaConta = input("Deseja abrir uma nova conta (s/n)? ")
+
+    if querNovaConta == 's':
+        conta = input("Digite o tipo de conta (corrente ou poupanca): ")
         saldo = float(input("Digite o saldo inicial da conta: "))
         while saldo < 0:
             print("Saldo inválido")
             saldo = float(input("Digite o saldo inicial da conta: "))
         cliente1.abreConta(conta, saldo)
 
+        # printa contas atuais
+        print("\nContas atuais:")
+        for conta in cliente1._contas:
+            print(conta)
+          
+    elif querNovaConta == 'n':
+        print("Obrigado! Volte sempre!")
+    
+    # a partir daqui, eu já tenho uma conta nova
 
-        while True:
-            if newCount >= 1:
-                question = input("\nDeseja fazer outra operação (s/n)? ")
-            else:
-                question = input("Deseja fazer alguma operação (s/n)? ")
-            
-            while question != 's' and question != 'n':
-                print("Resposta inválida")
-                question = input("Deseja fazer alguma operação (s/n)? ")
 
-            if question == 's':
-                count += 1
-                print("\nContas atuais:")
-                for conta in cliente1._contas:
-                    print(conta)
-                
-            # especificar em qual conta vai fazer a operação    
-            numConta = input("Em qual conta você deseja realizar a operação? (Digite o número da conta):")
+    while True:
+        while querNovaConta != 's' and querNovaConta != 'n':
+            print("Resposta inválida")
+            querNovaConta = input("\nDeseja fazer alguma operação (s/n)? ")
 
-            # Procurar a conta com o número especificado
+        if newCount >= 1:
+            querNovaConta = input("\nDeseja fazer outra operação (s/n)? ")
+        else:
+            querNovaConta = input("\nDeseja fazer alguma operação (s/n)? ")
+        
+
+        if querNovaConta == 's':
             conta_especifica = None
+            newCount += 1
+            
+            print("\nContas atuais:")
+            for conta in cliente1._contas:
+                print(conta)
+            
+            # especificar em qual conta vai fazer a operação    
+            numConta = input("\nEm qual conta você deseja realizar a operação? (Digite o número da conta): ")
+            
+            # primeira busca
+            for conta in cliente1._contas:
+                if str(conta.numeroConta) == numConta:
+                    conta_especifica = conta
+
+            while conta_especifica is None:
+                print("Conta não encontrada. Verifique o número da conta digitado.")
+                numConta = input("Em qual conta você deseja realizar a operação? (Digite o número da conta): ")
+
+            # atualiza
             for conta in cliente1._contas:
                 if str(conta.numeroConta) == numConta:
                     conta_especifica = conta
                 
+            
             if conta_especifica is not None:
-                operacao = input("Digite a operação (deposito ou saque): ")
+                operacao = input("\nDigite a operação (deposito ou saque): ")
+                
+                while operacao != 'deposito' and operacao != 'saque':
+                    print("Operação inválida")
+                    operacao = input("Digite a operação (deposito ou saque): ")
+
                 if operacao == 'deposito':
-                    value = input("Digite o valor do depósito: ")
-                    alue = input("Digite o valor do depósito: ")
-                    cliente1._contas[0].depositar(float(value))
+                    value = input("\nDigite o valor do depósito: ")
+                    conta_especifica.depositar(float(value))
                     print("Depósito realizado com sucesso!")
                     if conta == 'poupanca':
-                        cliente1._contas[0].calculaJuros()
+                        conta_especifica.calculaJuros()
                     else:
                         pass
-                    print(f"Novo saldo: R$ {cliente1._contas[0]._saldo}")
+                    print(f"Novo saldo: R$ {conta_especifica._saldo}")
+                
                 elif operacao == 'saque':
-                    print(f"Saldo atual: R$ {conta_especifica._saldo}")
+                    print(f"\nSaldo atual: R$ {conta_especifica._saldo}")
                     value = input("Digite o valor do saque: ")
                     conta_especifica.sacar(float(value))
                     print("Saque realizado com sucesso!")
                     print(f"Novo saldo: R$ {conta_especifica._saldo}")
-                else:
-                    print("Operação inválida")
-                    while operacao != 'deposito' and operacao != 'saque':
-                        operacao = input("Digite a operação (deposito ou saque): ")
-            else:
-                while conta_especifica is None:
-                    print("Conta não encontrada. Verifique o número da conta digitado.")
-                    numConta = input("Em qual conta você deseja realizar a operação? (Digite o número da conta):")
+                
+            
+        else:
+            print("\nFim das operações!")
+            querExtrato = input("Deseja ver o extrato da conta (s/n)? ")
 
+            while querExtrato != 's' and querExtrato != 'n':
+                print("Resposta inválida")
+                querExtrato = input("Deseja ver o extrato da conta (s/n)? ")
+
+            if querExtrato == 's':
+                print("\n")
+                conta_especifica.extrato()
+            else:
+                print("Obrigado! Volte sempre!")
+                break
                 
                 
                 
