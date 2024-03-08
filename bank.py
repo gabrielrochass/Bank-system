@@ -2,6 +2,10 @@
 # classes: Conta, Cliente, Extrato
 
 # implementar tranferencia entre contas
+# verificar unicidade das contas
+#tratamento  de exceções com entradas invalidas no saldo, por exemplo
+# melhorar legibilidade usando funções
+
 
 # importando bibliotecas
 import random
@@ -138,6 +142,7 @@ if __name__ == '__main__':
                 print("Depósito realizado com sucesso!")
                 if conta == 'poupanca':
                     cliente1._contas[0].calculaJuros()
+                    print(f"Rendimento: R$ {cliente1._contas[0]._saldo * cliente1._contas[0]._taxaJuros}")
                 else:
                     pass
                 print(f"Novo saldo: R$ {cliente1._contas[0]._saldo}")
