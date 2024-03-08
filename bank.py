@@ -1,6 +1,8 @@
 # sistema bancário com POO
 # classes: Conta, Cliente, Extrato
 
+# implementar tranferencia entre contas
+
 # importando bibliotecas
 import random
 import datetime
@@ -203,7 +205,7 @@ if __name__ == '__main__':
         if querNovaConta == 's':
             conta_especifica = None
             newCount += 1
-            
+
             print("\nContas atuais:")
             for conta in cliente1._contas:
                 print(conta)
@@ -238,6 +240,7 @@ if __name__ == '__main__':
                     conta_especifica.depositar(float(value))
                     print("Depósito realizado com sucesso!")
                     if conta == 'poupanca':
+                        # printa o rendimento de juros
                         conta_especifica.calculaJuros()
                     else:
                         pass
@@ -261,7 +264,8 @@ if __name__ == '__main__':
 
             if querExtrato == 's':
                 print("\n")
-                conta_especifica.extrato()
+                for conta in cliente1._contas:
+                    conta.extrato()
             else:
                 print("Obrigado! Volte sempre!")
                 break
