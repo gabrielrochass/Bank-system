@@ -10,6 +10,7 @@
 # importando bibliotecas
 import random
 import datetime
+from visual import Interface
 
 # classe Cliente
 class Cliente:
@@ -89,8 +90,13 @@ class ContaPoupanca(Conta):
         return f'Conta Poupança de número {self.numeroConta} possui saldo de R$ {self._saldo}'
     
 
+def main():
+    app = Interface()
+    app.mainloop()
+
 # main
 if __name__ == '__main__':
+    main()
     count = 0
     name = input("Digite o nome do cliente: ")
     cpf = input("Digite o CPF do cliente: ")
